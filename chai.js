@@ -1565,6 +1565,7 @@ assert.ifError = function (val, msg) {
 //('above', 'greaterThan')
 //('below', 'lessThan')
 //('throw', 'throws');
+
 }); // module: interface/assert.js
 
 require.register("interface/expect.js", function(module, exports, require){
@@ -1606,6 +1607,11 @@ module.exports = function () {
   Object.defineProperty(Object.prototype, 'should', {
     set: function(){},
     get: function(){
+      if (this instanceof String || this instanceof Number) {
+        return new Assertion (this.constructor(this));
+      } else if (this instanceof Boolean) {
+        return new Assertion (this == true);
+      }
       return new Assertion(this);
     },
     configurable: true
@@ -1642,6 +1648,7 @@ module.exports = function () {
 
   return should;
 };
+
 }); // module: interface/should.js
 
 require.register("utils/constants.js", function(module, exports, require){
